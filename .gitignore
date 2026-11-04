@@ -1,0 +1,20 @@
+# ModelSim / QuestaSim
+work/
+transcript
+*.wlf
+wlft*
+modelsim.ini
+*.vstf
+*.mti
+*.mpf.bak
+
+# Ket qua mo phong khac
+*.vcd
+*.log
+*.vvp
+a.out
+
+# He dieu hanh / editor
+.DS_Store
+Thumbs.db
+.vscode/
