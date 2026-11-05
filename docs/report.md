@@ -175,17 +175,13 @@ Testbench tự kiểm tra, đo số chu kỳ mà mỗi đèn sáng và in kết 
 ==== PASS: khong co loi ====
 ```
 
-> **[TODO – Anh Khoa]** Dán ảnh chụp Transcript hiển thị kết quả PASS tại đây.
-
 ### 4.4. Dạng sóng
 
-> **[TODO – Anh Khoa]** Thêm 2 ảnh vào `docs/waveform/`, sửa tên file trong 2 dòng ảnh dưới cho đúng.
-
-![Dạng sóng toàn bộ chu trình](waveform/full_cycle.png)
+![Dạng sóng toàn bộ chu trình](waveform/waveform_full.png)
 
 *Hình 2 – Dạng sóng toàn bộ chu trình RED → GREEN → YELLOW → RED.*
 
-![Dạng sóng lúc chuyển trạng thái](waveform/transition.png)
+![Dạng sóng lúc chuyển trạng thái](waveform/waveform_transition.png)
 
 *Hình 3 – Dạng sóng tại thời điểm chuyển trạng thái.*
 
@@ -195,8 +191,6 @@ Testbench tự kiểm tra, đo số chu kỳ mà mỗi đèn sáng và in kết 
 - Tại mọi thời điểm chỉ có **một** đèn sáng.
 - Ngõ ra thay đổi cùng cạnh lên của `clk` khi `state` đổi, đúng đặc trưng của Moore FSM (ngõ ra chỉ phụ thuộc trạng thái).
 - Sau YELLOW hệ thống quay về RED, chu trình lặp lại với chu kỳ 12 clock.
-
-> **[TODO – Anh Khoa]** Bổ sung nhận xét riêng từ ảnh sóng thực tế nếu có điểm đáng chú ý.
 
 ### 4.5. Testbench mở rộng (`tb/tb_extra.v`)
 
@@ -214,8 +208,6 @@ Testbench mở rộng do Nguyễn Duy Khoa (SE204859) viết. File tạo **hai b
 - Test 1 xác nhận reset có tác dụng ngay cả khi FSM đang ở giữa chu trình (trạng thái GREEN) và FSM giữ ở RED khi reset còn được giữ.
 - Test 2 xác nhận thiết kế dùng `parameter` đúng cách: đổi thời gian mà không cần sửa cấu trúc FSM, bộ đếm `cnt` và tín hiệu `done` vẫn hoạt động đúng với thời gian mới.
 - Testbench ghi thêm file dạng sóng `tb_extra.vcd` bằng `$dumpfile` và `$dumpvars`, có thể mở lại để xem.
-
-> **[TODO]** Nếu Duy Khoa gửi ảnh Transcript của ModelSim, lưu vào `docs/waveform/tb_extra_transcript.png` và thêm dòng: `![Kết quả testbench mở rộng](waveform/tb_extra_transcript.png)`
 
 ---
 
