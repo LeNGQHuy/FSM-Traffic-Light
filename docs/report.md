@@ -200,12 +200,22 @@ Testbench tự kiểm tra, đo số chu kỳ mà mỗi đèn sáng và in kết 
 
 ### 4.5. Testbench mở rộng (`tb/tb_extra.v`)
 
-| Test | Mô tả | Kết quả mong đợi |
-|---|---|---|
-| Test 1 | Bấm `rst` khi đèn đang xanh | Đèn về đỏ (`red = 1`), `cnt = 0` |
-| Test 2 | Đổi tham số `RED=3`, `GREEN=4`, `YELLOW=1` | Đỏ 3, xanh 4, vàng 1 chu kỳ (tổng 8 chu kỳ) |
+Testbench mở rộng do Nguyễn Duy Khoa (SE204859) viết. File tạo **hai bản** `traffic_light` chạy song song trên cùng một clock (chu kỳ 10 ns): `dut1` dùng thời gian mặc định (5, 5, 2) cho Test 1, `dut2` dùng thời gian (3, 4, 1) cho Test 2. Mỗi test tự đối chiếu kết quả và cộng dồn số lỗi vào biến `errors`.
 
-> **[TODO – Duy Khoa]** Điền kết quả thực tế (PASS/FAIL, ảnh Transcript nếu có) sau khi chạy `tb_extra.v`.
+| Test | Mô tả | Cách kiểm tra | Kết quả mong đợi |
+|---|---|---|---|
+| Test 1 | Bấm `rst` khi đèn đang xanh | Chờ `green = 1`, để xanh sáng thêm 2 chu kỳ rồi đặt `rst = 1`. Sau 1 chu kỳ clock kiểm tra ngõ ra, sau đó giữ reset thêm 3 chu kỳ và kiểm tra lại | `red = 1`, `green = 0`, `yellow = 0` ngay sau reset và trong suốt lúc giữ reset |
+| Test 2 | Đổi tham số `RED_TIME = 3`, `GREEN_TIME = 4`, `YELLOW_TIME = 1` | Đếm số chu kỳ liên tiếp mà mỗi đèn sáng, so với 3, 4, 1 mỗi khi đèn đổi trạng thái; đồng thời kiểm tra mỗi chu kỳ chỉ có đúng 1 đèn sáng | Đỏ 3, xanh 4, vàng 1 chu kỳ (tổng 8 chu kỳ). Testbench chạy 2 vòng đầy đủ cộng thêm 1 chu kỳ (17 chu kỳ) |
+
+**Kết quả:** Theo ghi chú của tác giả trong file, mô phỏng trên ModelSim cho kết quả **PASS** ở cả hai test, cuối cùng testbench in ra `==== PASS: khong co loi ====`.
+
+**Ý nghĩa:**
+
+- Test 1 xác nhận reset có tác dụng ngay cả khi FSM đang ở giữa chu trình (trạng thái GREEN) và FSM giữ ở RED khi reset còn được giữ.
+- Test 2 xác nhận thiết kế dùng `parameter` đúng cách: đổi thời gian mà không cần sửa cấu trúc FSM, bộ đếm `cnt` và tín hiệu `done` vẫn hoạt động đúng với thời gian mới.
+- Testbench ghi thêm file dạng sóng `tb_extra.vcd` bằng `$dumpfile` và `$dumpvars`, có thể mở lại để xem.
+
+> **[TODO]** Nếu Duy Khoa gửi ảnh Transcript của ModelSim, lưu vào `docs/waveform/tb_extra_transcript.png` và thêm dòng: `![Kết quả testbench mở rộng](waveform/tb_extra_transcript.png)`
 
 ---
 
