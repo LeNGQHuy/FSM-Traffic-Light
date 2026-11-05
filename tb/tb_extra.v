@@ -2,6 +2,8 @@
 // Testbench mo rong cho traffic_light
 // Test 1: bam reset khi den dang xanh -> den phai ve do
 // Test 2: doi thoi gian RED=3, GREEN=4, YELLOW=1 -> kiem tra so chu ky
+// Ket qua mo phong ModelSim: PASS (Test 1 va Test 2 deu dung)
+// Tac gia: Nguyen Duy Khoa - SE204859
 // ============================================================
 `timescale 1ns/1ps
 
@@ -38,14 +40,16 @@ module tb_extra;
 
     // ============================================================
     // TEST 1: reset khi den dang xanh
+    // Y tuong: cho den xanh sang, de xanh them 2 chu ky, roi bam reset
+    // va kiem tra den phai ve do (va giu do trong luc con reset)
     // ============================================================
     integer i;
     initial begin
         #12 rst1 = 0;                         // nha reset
 
-        // cho den xanh sang
+        // Doi den xanh sang
         while (green1 !== 1'b1) @(posedge clk);
-        // de den xanh sang them 2 chu ky roi moi bam reset
+        // De den xanh sang them 2 chu ky roi moi bam reset
         repeat (2) @(posedge clk);
 
         $display("[TEST 1] Den dang xanh (G=%b), bam reset", green1);
@@ -60,7 +64,7 @@ module tb_extra;
             errors = errors + 1;
         end
 
-        // giu reset them vai chu ky, den van phai o do
+        // Giu reset them vai chu ky, den van phai o do
         for (i = 0; i < 3; i = i + 1) begin
             @(posedge clk); #1;
             if (!(red1 === 1'b1 && green1 === 1'b0 && yellow1 === 1'b0)) begin
@@ -73,6 +77,7 @@ module tb_extra;
 
     // ============================================================
     // TEST 2: kiem tra so chu ky khi doi thoi gian
+    // Y tuong: dem so chu ky lien tiep cua tung den, so voi RED2/GREEN2/YELLOW2
     // ============================================================
     integer cycle2 = 0;
     integer run2   = 0;
@@ -120,7 +125,8 @@ module tb_extra;
 
     initial begin
         #12 rst2 = 0;
-        #((2 * (RED2 + GREEN2 + YELLOW2) + 1) * 10);   // chay 2 vong + 1
+        // Chay 2 vong day du + 1 chu ky de kiem tra tung den sang dung so chu ky
+        #((2 * (RED2 + GREEN2 + YELLOW2) + 1) * 10);
         t2_done = 1;
     end
 
