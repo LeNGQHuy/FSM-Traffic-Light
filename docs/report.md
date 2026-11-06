@@ -179,24 +179,29 @@ Testbench tự kiểm tra, đo số chu kỳ mà mỗi đèn sáng và in kết 
 
 ### 4.4. Dạng sóng
 
-> **[TODO – Anh Khoa]** Thêm 2 ảnh vào `docs/waveform/`, sửa tên file trong 2 dòng ảnh dưới cho đúng.
+Dạng sóng được chụp từ cửa sổ Wave của ModelSim (do Mai Anh Khoa thực hiện). Nhóm tín hiệu gồm: ngõ vào `clk`, `rst`; ngõ ra `red`, `green`, `yellow`; và nhóm "Ben trong FSM" gồm trạng thái hiện tại và bộ đếm thời gian. Chu kỳ clock là 10 ns, mô phỏng chạy đến 262 ns.
 
-![Dạng sóng toàn bộ chu trình](waveform/full_cycle.png)
+![Dạng sóng toàn bộ chu trình](waveform/waveform_full.png)
 
-*Hình 2 – Dạng sóng toàn bộ chu trình RED → GREEN → YELLOW → RED.*
+*Hình 2 – Dạng sóng toàn bộ chu trình RED → GREEN → YELLOW → RED (hai vòng liên tiếp).*
 
-![Dạng sóng lúc chuyển trạng thái](waveform/transition.png)
+**Nhận xét Hình 2:**
 
-*Hình 3 – Dạng sóng tại thời điểm chuyển trạng thái.*
+- Sau khi `rst` xuống 0 (khoảng 5 ns), đèn đỏ sáng trong 50 ns, tương ứng **5 chu kỳ clock**. Trong lúc này trạng thái bằng 0 (RED) và bộ đếm đếm từ 0 đến 4.
+- Tại cạnh clock kế tiếp (khoảng 55 ns), trạng thái chuyển sang 1 (GREEN), đèn xanh sáng 50 ns, tức **5 chu kỳ**, bộ đếm lại đếm từ 0 đến 4.
+- Tại khoảng 105 ns, trạng thái chuyển sang 2 (YELLOW), đèn vàng sáng 20 ns, tức **2 chu kỳ**, bộ đếm chỉ đếm 0 và 1.
+- Sau YELLOW, FSM quay về RED (khoảng 125 ns) và chu trình lặp lại. Một vòng gồm 5 + 5 + 2 = **12 chu kỳ (120 ns)**, đúng đặc tả.
+- Tại mọi thời điểm chỉ có **một** đèn sáng. Giá trị trạng thái 0, 1, 2 khớp với bảng mã hóa `00`, `01`, `10` ở mục 3.2.
 
-**Nhận xét:**
+![Dạng sóng lúc chuyển trạng thái](waveform/waveform_transition.png)
 
-- Đèn đỏ sáng 5 chu kỳ, sau đó đèn xanh sáng 5 chu kỳ, cuối cùng đèn vàng sáng 2 chu kỳ, đúng đặc tả.
-- Tại mọi thời điểm chỉ có **một** đèn sáng.
-- Ngõ ra thay đổi cùng cạnh lên của `clk` khi `state` đổi, đúng đặc trưng của Moore FSM (ngõ ra chỉ phụ thuộc trạng thái).
-- Sau YELLOW hệ thống quay về RED, chu trình lặp lại với chu kỳ 12 clock.
+*Hình 3 – Phóng to tại thời điểm chuyển từ RED sang GREEN (khoảng 55 ns).*
 
-> **[TODO – Anh Khoa]** Bổ sung nhận xét riêng từ ảnh sóng thực tế nếu có điểm đáng chú ý.
+**Nhận xét Hình 3:**
+
+- Tại cạnh lên của `clk` ở khoảng 55 ns, bộ đếm đang ở giá trị 4 (chu kỳ cuối của RED) và `done` có hiệu lực, nên trạng thái đổi từ 0 sang 1 và bộ đếm quay về 0.
+- Cùng thời điểm đó `red` xuống 0 và `green` lên 1, `yellow` giữ nguyên 0. Ngõ ra đổi theo trạng thái mà không cần tín hiệu vào nào khác, đúng đặc trưng của Moore FSM.
+- Con trỏ (Cursor 1, 57978 ps) nằm sau lúc chuyển: `green = 1`, `red = 0`, `yellow = 0`, `rst = 0`, xác nhận hệ thống đang ở GREEN.
 
 ### 4.5. Testbench mở rộng (`tb/tb_extra.v`)
 
